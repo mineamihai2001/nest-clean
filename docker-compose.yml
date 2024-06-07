@@ -1,0 +1,25 @@
+version: "0.1"
+volumes:
+    nodeModules:
+    certs:
+services:
+    api:
+        build:
+            context: .
+            dockerfile: Dockerfile
+            target: base
+        container_name: nest-clean
+        working_dir: /service
+        volumes:
+            - .:/service
+            - nodeModules:/service/node_modules
+            - certs:/service/certs
+        ports:
+            - "3000:3000"
+        command: pnpm run dev
+        depends_on:
+            - mongodb
+    mongodb:
+        image: mongo:latest
+        ports:
+            - "27017:27017"
